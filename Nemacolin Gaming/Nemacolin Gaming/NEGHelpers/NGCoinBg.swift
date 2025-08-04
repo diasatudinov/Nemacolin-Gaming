@@ -1,19 +1,27 @@
+//
+//  NGCoinBg.swift
+//  Nemacolin Gaming
+//
+//  Created by Dias Atudinov on 04.08.2025.
+//
+
+
 import SwiftUI
 
 struct NGCoinBg: View {
     @StateObject var user = NGUser.shared
-    var height: CGFloat = NGDeviceManager.shared.deviceType == .pad ? 120:70
+    var height: CGFloat = NGDeviceManager.shared.deviceType == .pad ? 100:50
     var body: some View {
         ZStack {
-            Image(.coinsBgNG)
+            Image(.coinsBgNEG)
                 .resizable()
                 .scaledToFit()
             
             Text("\(user.money)")
-                .font(.system(size: NGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
-                .foregroundStyle(.white)
+                .font(.system(size: NGDeviceManager.shared.deviceType == .pad ? 30:15, weight: .black))
+                .foregroundStyle(.yellow)
                 .textCase(.uppercase)
-                .offset(x: 20)
+                .offset(x: -15)
             
             
             

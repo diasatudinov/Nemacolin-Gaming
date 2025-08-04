@@ -10,22 +10,9 @@
 		2BAF4EFF2E40E91100159159 /* Nemacolin Gaming.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Nemacolin Gaming.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2BAF4F112E40E96200159159 /* Exceptions for "Nemacolin Gaming" folder in "Nemacolin Gaming" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Nemacolin-Gaming-Info.plist",
-			);
-			target = 2BAF4EFE2E40E91100159159 /* Nemacolin Gaming */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		2BAF4F012E40E91100159159 /* Nemacolin Gaming */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				2BAF4F112E40E96200159159 /* Exceptions for "Nemacolin Gaming" folder in "Nemacolin Gaming" target */,
-			);
 			path = "Nemacolin Gaming";
 			sourceTree = "<group>";
 		};

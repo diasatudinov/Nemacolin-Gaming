@@ -1,3 +1,11 @@
+//
+//  NGDeviceManager.swift
+//  Nemacolin Gaming
+//
+//  Created by Dias Atudinov on 04.08.2025.
+//
+
+
 import UIKit
 
 class NGDeviceManager {
