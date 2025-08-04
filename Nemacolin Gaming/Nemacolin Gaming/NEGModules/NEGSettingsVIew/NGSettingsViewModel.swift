@@ -1,3 +1,10 @@
+//
+//  NGSettingsViewModel.swift
+//  Nemacolin Gaming
+//
+//
+
+
 import SwiftUI
 
 class NGSettingsViewModel: ObservableObject {
