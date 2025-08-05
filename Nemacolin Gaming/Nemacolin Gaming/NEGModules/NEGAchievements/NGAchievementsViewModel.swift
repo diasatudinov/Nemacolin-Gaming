@@ -1,13 +1,19 @@
+//
+//  NGAchievementsViewModel.swift
+//  Nemacolin Gaming
+//
+//
+
+
 import SwiftUI
 
 class NGAchievementsViewModel: ObservableObject {
     
     @Published var achievements: [MGAchievement] = [
-        MGAchievement(image: "achieve1ImageNG", isAchieved: false),
-        MGAchievement(image: "achieve2ImageNG", isAchieved: false),
-        MGAchievement(image: "achieve3ImageNG", isAchieved: false),
-        MGAchievement(image: "achieve4ImageNG", isAchieved: false),
-        MGAchievement(image: "achieve5ImageNG", isAchieved: false)
+        MGAchievement(image: "achieve1ImageNEG", title: "Zombie party", subtitle: "There should be 15 zombies in one field." ,isAchieved: false),
+        MGAchievement(image: "achieve2ImageNEG", title: "Brain Party", subtitle: "Collect 1000 brains" ,isAchieved: false),
+        MGAchievement(image: "achieve3ImageNEG", title: "Full house at cemetery", subtitle: "Lose 1000 zombies" ,isAchieved: false),
+        MGAchievement(image: "achieve4ImageNEG", title: "Five hundred dead", subtitle: "Kill 500 warriors" ,isAchieved: false),
 
     ] {
         didSet {
@@ -52,5 +58,7 @@ class NGAchievementsViewModel: ObservableObject {
 struct MGAchievement: Codable, Hashable, Identifiable {
     var id = UUID()
     var image: String
+    var title: String
+    var subtitle: String
     var isAchieved: Bool
 }
