@@ -1,58 +1,107 @@
+//
+//  DailyRewardsView.swift
+//  Nemacolin Gaming
+//
+//  Created by Dias Atudinov on 05.08.2025.
+//
+
+import SwiftUI
+
 struct DailyRewardsView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = DailyRewardsViewModel()
     
     // 7 columns for each day
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 7)
-    
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 4)
+    private let dayCellHeight: CGFloat = NGDeviceManager.shared.deviceType == .pad ? 160:90
     var body: some View {
-        VStack(spacing: 20) {
-            // Grid of circles for each day
-            LazyVGrid(columns: columns, spacing: 16) {
-                ForEach(1...7, id: \.self) { day in
-                    VStack {
-                        ZStack {
-                            Circle()
-                                .strokeBorder(viewModel.isDayUnlocked(day) ? Color.accentColor : Color.gray, lineWidth: 2)
-                                .frame(width: 50, height: 50)
-
-                            if viewModel.isDayClaimed(day) {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.accentColor)
-                            } else {
-                                Text("\(day)")
-                                    .foregroundColor(viewModel.isDayUnlocked(day) ? .accentColor : .gray)
-                            }
+        ZStack {
+            VStack(spacing: 0) {
+                ZStack(alignment: .top) {
+                    
+                    Image(.dailyRewardTextNEG)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:72)
+                    
+                    HStack(alignment: .top) {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                            
+                        } label: {
+                            Image(.backIconNEG)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 100:50)
                         }
-                        Text("Day \(day)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        Spacer()
+                        
+                        NGCoinBg()
+                    }.padding([.horizontal, .top])
+                }
+                Spacer()
+                // Grid of circles for each day
+                ZStack {
+                    
+                    Image(.dailyRewardsBgNEG)
+                        .resizable()
+                        .scaledToFit()
+                        
+                    
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(1...viewModel.totalDaysCount, id: \.self) { day in
+                            ZStack {
+                                Image(.dayBgNEG)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .opacity(viewModel.isDayClaimed(day) ? 1: viewModel.isDayUnlocked(day) ? 0.7:0.3)
+                                    
+                               
+                                
+                                
+                                VStack {
+                                    Text("Day \(day)")
+                                        .font(.system(size: 15, weight: .bold))
+                                        .foregroundStyle(.yellow)
+                                    Spacer()
+                                }.padding(20)
+                            }
+                            .frame(height: dayCellHeight)
+                            .offset(x: day > 4 ? dayCellHeight/2:0)
+                            
+                        }
+                    }.frame(width: NGDeviceManager.shared.deviceType == .pad ? 800:550)
+                    
+                    VStack {
+                        Spacer()
+                        Button {
+                            viewModel.claimNext()
+                        } label: {
+                            Image(.claimBtnNEG)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:72)
+                        }.offset(y: NGDeviceManager.shared.deviceType == .pad ? 70:35)
                     }
+                    
                 }
+                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 400:270)
+                Spacer()
             }
-            .padding(.horizontal)
+            .padding()
             
-            // Claim button or countdown message
-            if viewModel.canClaimNext() {
-                Button(action: viewModel.claimNext) {
-                    Text("Claim Day \(viewModel.claimedCount + 1) Reward")
-                        .bold()
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding(.horizontal)
-            } else if viewModel.claimedCount < 7 {
-                Text("Next reward in \(viewModel.formattedTimeRemaining())")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            } else {
-                Text("All rewards claimed!")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding()
+        }.background(
+            ZStack {
+                Image(.appBgNEG)
+                    .resizable()
+                    .scaledToFill()
+                Color.black.opacity(0.6)
+            }.edgesIgnoringSafeArea(.all)
+            
+        )
     }
+}
+
+#Preview {
+    DailyRewardsView()
 }
