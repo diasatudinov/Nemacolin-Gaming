@@ -2,7 +2,6 @@
 //  DailyRewardsView.swift
 //  Nemacolin Gaming
 //
-//  Created by Dias Atudinov on 05.08.2025.
 //
 
 import SwiftUI
@@ -11,7 +10,6 @@ struct DailyRewardsView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = DailyRewardsViewModel()
     
-    // 7 columns for each day
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 4)
     private let dayCellHeight: CGFloat = NGDeviceManager.shared.deviceType == .pad ? 160:90
     var body: some View {
@@ -40,7 +38,6 @@ struct DailyRewardsView: View {
                     }.padding([.horizontal, .top])
                 }
                 Spacer()
-                // Grid of circles for each day
                 ZStack {
                     
                     Image(.dailyRewardsBgNEG)

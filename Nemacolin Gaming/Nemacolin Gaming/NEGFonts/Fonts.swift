@@ -1,5 +1,12 @@
+//
+//  Fonts.swift
+//  Nemacolin Gaming
+//
+//
+
+
 import Foundation
 
 enum Fonts: String {
-    case regular = "ADLaMDisplay-Regular"
+    case regular = "Chocopy"
 }
