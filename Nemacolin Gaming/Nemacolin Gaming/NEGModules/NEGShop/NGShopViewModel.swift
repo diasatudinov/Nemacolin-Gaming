@@ -1,37 +1,39 @@
+//
+//  NGShopViewModel.swift
+//  Nemacolin Gaming
+//
+//  Created by Dias Atudinov on 06.08.2025.
+//
+
+
 import SwiftUI
 
 
 final class NGShopViewModel: ObservableObject {
     // MARK: – Shop catalogues
     @Published var shopBgItems: [NGItem] = [
-        NGItem(name: "bg1", image: "bgImage1NG", icon: "gameBgIcon1NG", price: 100),
-        NGItem(name: "bg2", image: "bgImage2NG", icon: "gameBgIcon2NG", price: 100),
-        NGItem(name: "bg3", image: "bgImage3NG", icon: "gameBgIcon3NG", price: 100),
-        NGItem(name: "bg4", image: "bgImage4NG", icon: "gameBgIcon4NG", price: 100),
+        NGItem(name: "bg1", image: "bgImage1NEG", icon: "gameBgIcon1NEG", price: 100),
+        NGItem(name: "bg2", image: "bgImage2NEG", icon: "gameBgIcon2NEG", price: 100),
+        NGItem(name: "bg3", image: "bgImage3NEG", icon: "gameBgIcon3NEG", price: 100),
+        NGItem(name: "bg4", image: "bgImage4NEG", icon: "gameBgIcon4NEG", price: 100),
     ]
-    @Published var shopSpecialItems: [NGItem] = [
-        NGItem(name: "special1", image: "specialImage1NG", icon: "specialIcon1NG", price: 10),
-        NGItem(name: "special2", image: "specialImage2NG", icon: "specialIcon2NG", price: 10),
-        NGItem(name: "special3", image: "specialImage3NG", icon: "specialIcon3NG", price: 10),
-    ] {
-        didSet { saveBoughtSpecials() }
-    }
+    
     @Published var shopSkinItems: [NGItem] = [
-        NGItem(name: "skin1", image: "skinImage1NG", icon: "skinIcon1NG", price: 100),
-        NGItem(name: "skin2", image: "skinImage2NG", icon: "skinIcon2NG", price: 100),
-        NGItem(name: "skin3", image: "skinImage3NG", icon: "skinIcon3NG", price: 100),
-        NGItem(name: "skin4", image: "skinImage4NG", icon: "skinIcon4NG", price: 100),
+        NGItem(name: "skin1", image: "skinImage1NEG", icon: "skinIcon1NEG", price: 100),
+        NGItem(name: "skin2", image: "skinImage2NEG", icon: "skinIcon2NEG", price: 100),
+        NGItem(name: "skin3", image: "skinImage3NEG", icon: "skinIcon3NEG", price: 100),
+        NGItem(name: "skin4", image: "skinImage4NEG", icon: "skinIcon4NEG", price: 100),
     ]
     
     // MARK: – Bought
     @Published var boughtBgItems: [NGItem] = [
-        NGItem(name: "bg1", image: "bgImage1NG", icon: "gameBgIcon1NG", price: 100)
+        NGItem(name: "bg1", image: "bgImage1NEG", icon: "gameBgIcon1NEG", price: 100),
     ] {
         didSet { saveBoughtBg() }
     }
 
     @Published var boughtSkinItems: [NGItem] = [
-        NGItem(name: "skin1", image: "skinImage1NG", icon: "skinIcon1NG", price: 100)
+        NGItem(name: "skin1", image: "skinImage1NEG", icon: "skinIcon1NEG", price: 100),
     ] {
         didSet { saveBoughtSkins() }
     }
@@ -45,20 +47,16 @@ final class NGShopViewModel: ObservableObject {
     }
     
     // MARK: – UserDefaults keys
-    private let bgKey            = "currentBgRMG"
-    private let boughtBgKey      = "boughtBgRMG"
-    private let specialKey       = "currentSpecialRMG"
-    private let boughtSpecialKey = "boughtSpecialRMG"
-    private let skinKey          = "currentSkinNG1"
-    private let boughtSkinKey    = "boughtSkinNG1"
+    private let bgKey            = "currentBgNEG"
+    private let boughtBgKey      = "boughtBgNEG"
+    private let skinKey          = "currentSkinNEG1"
+    private let boughtSkinKey    = "boughtSkinNEG1"
     
     // MARK: – Init
     init() {
         loadCurrentBg()
         loadBoughtBg()
-        
-        loadBoughtSpecial()
-        
+                
         loadCurrentSkin()
         loadBoughtSkins()
     }
@@ -86,18 +84,6 @@ final class NGShopViewModel: ObservableObject {
         if let data = UserDefaults.standard.data(forKey: boughtBgKey),
            let items = try? JSONDecoder().decode([NGItem].self, from: data) {
             boughtBgItems = items
-        }
-    }
-    
-    // MARK: – Save / Load Specials
-    private func saveBoughtSpecials() {
-        guard let data = try? JSONEncoder().encode(shopSpecialItems) else { return }
-        UserDefaults.standard.set(data, forKey: boughtSpecialKey)
-    }
-    private func loadBoughtSpecial() {
-        if let data = UserDefaults.standard.data(forKey: boughtSpecialKey),
-           let items = try? JSONDecoder().decode([NGItem].self, from: data) {
-            shopSpecialItems = items
         }
     }
     
@@ -133,12 +119,6 @@ final class NGShopViewModel: ObservableObject {
         case .background:
             guard !boughtBgItems.contains(item) else { return }
             boughtBgItems.append(item)
-        case .special:
-            
-            if let index = shopSpecialItems.firstIndex(where: { $0.name == item.name }) {
-                shopSpecialItems[index].rate += 0.1
-                shopSpecialItems[index].level += 1
-            }
         case .skin:
             guard !boughtSkinItems.contains(item) else { return }
             boughtSkinItems.append(item)
@@ -149,8 +129,6 @@ final class NGShopViewModel: ObservableObject {
         switch category {
         case .background:
             return boughtBgItems.contains(where: { $0.name == item.name })
-        case .special:
-            return false
         case .skin:
             return boughtSkinItems.contains(where: { $0.name == item.name })
         }
@@ -169,14 +147,6 @@ final class NGShopViewModel: ObservableObject {
                 user.minusUserMoney(for: item.price)
                 buy(item, category: .background)
             }
-        case .special:
-            guard user.money >= item.price else {
-                return
-            }
-            user.minusUserMoney(for: item.price)
-            buy(item, category: .special)
-            
-            
         case .skin:
             if isPurchased(item, category: .skin) {
                 currentSkinItem = item
@@ -203,8 +173,6 @@ final class NGShopViewModel: ObservableObject {
             
             return true
             
-        case .special:
-            return false
         case .skin:
             guard let currentItem = currentSkinItem, currentItem.name == item.name else {
                 return false
@@ -217,7 +185,6 @@ final class NGShopViewModel: ObservableObject {
 
 enum NGItemCategory: String {
     case background = "background"
-    case special = "special"
     case skin = "skin"
 }
 
