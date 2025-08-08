@@ -53,6 +53,7 @@ class DailyRewardsViewModel: ObservableObject {
                 resetCycle()
             }
             guard canClaimNext() else { return }
+            NEGUser.shared.updateUserMoney(for: 40)
             claimedCount += 1
             lastClaimDate = Date()
             saveState()

@@ -8,7 +8,7 @@ import SwiftUI
 
 struct NEGSettingsView: View {
     @Environment(\.presentationMode) var presentationMode
-    
+    @StateObject var shopVM = NEGShopViewModel()
     @ObservedObject var settingsVM: NGSettingsViewModel
     var body: some View {
         ZStack {
@@ -20,7 +20,7 @@ struct NEGSettingsView: View {
                     Image(.settingTitleTextNEG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 180:90)
+                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 180:90)
                     
                     HStack(alignment: .top) {
                         Button {
@@ -30,11 +30,11 @@ struct NEGSettingsView: View {
                             Image(.backIconNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 100:50)
                         }
                         Spacer()
                         
-                        NGCoinBg()
+                        NEGCoinBg()
                     }.padding([.horizontal, .top])
                 }
                 
@@ -50,7 +50,7 @@ struct NEGSettingsView: View {
                             Image(settingsVM.soundEnabled ? .soundsIconOnNEG:.soundsIconOffNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 130:70)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 130:70)
                             
                             Button {
                                 withAnimation {
@@ -62,7 +62,7 @@ struct NEGSettingsView: View {
                                     Image(settingsVM.soundEnabled ? .onNEG:.offNEG)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 70:38)
+                                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 70:38)
                                     
                                 }
                             }
@@ -71,16 +71,20 @@ struct NEGSettingsView: View {
                         Image(.englishTextNEG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 130:73)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 130:73)
                     }.padding(.top)
-                }.frame(width: NGDeviceManager.shared.deviceType == .pad ? 750:426,height: NGDeviceManager.shared.deviceType == .pad ? 400:250)
+                }.frame(width: NEGDeviceManager.shared.deviceType == .pad ? 750:426,height: NEGDeviceManager.shared.deviceType == .pad ? 400:250)
                 Spacer()
             }.padding()
         }.background(
             ZStack {
-                Image(.appBgNEG)
-                    .resizable()
-                    .scaledToFill()
+                if let bgItem = shopVM.currentBgItem {
+                    Image(bgItem.image)
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .scaledToFill()
+                }
+                
                 Color.black.opacity(0.6)
             }.edgesIgnoringSafeArea(.all)
 

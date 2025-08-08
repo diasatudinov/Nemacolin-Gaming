@@ -1,5 +1,5 @@
 //
-//  NGDeviceManager.swift
+//  NEGDeviceManager.swift
 //  Nemacolin Gaming
 //
 //
@@ -7,8 +7,8 @@
 
 import UIKit
 
-class NGDeviceManager {
-    static let shared = NGDeviceManager()
+class NEGDeviceManager {
+    static let shared = NEGDeviceManager()
     
     var deviceType: UIUserInterfaceIdiom
     

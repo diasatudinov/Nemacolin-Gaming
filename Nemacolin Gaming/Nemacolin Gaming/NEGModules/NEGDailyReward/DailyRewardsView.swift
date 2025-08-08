@@ -9,9 +9,10 @@ import SwiftUI
 struct DailyRewardsView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject private var viewModel = DailyRewardsViewModel()
-    
+    @StateObject var shopVM = NEGShopViewModel()
+
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 4)
-    private let dayCellHeight: CGFloat = NGDeviceManager.shared.deviceType == .pad ? 160:90
+    private let dayCellHeight: CGFloat = NEGDeviceManager.shared.deviceType == .pad ? 160:90
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
@@ -20,7 +21,7 @@ struct DailyRewardsView: View {
                     Image(.dailyRewardTextNEG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:72)
+                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:72)
                     
                     HStack(alignment: .top) {
                         Button {
@@ -30,11 +31,11 @@ struct DailyRewardsView: View {
                             Image(.backIconNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 100:50)
                         }
                         Spacer()
                         
-                        NGCoinBg()
+                        NEGCoinBg()
                     }.padding([.horizontal, .top])
                 }
                 Spacer()
@@ -67,7 +68,7 @@ struct DailyRewardsView: View {
                             .offset(x: day > 4 ? dayCellHeight/2:0)
                             
                         }
-                    }.frame(width: NGDeviceManager.shared.deviceType == .pad ? 800:550)
+                    }.frame(width: NEGDeviceManager.shared.deviceType == .pad ? 800:550)
                     
                     VStack {
                         Spacer()
@@ -77,21 +78,24 @@ struct DailyRewardsView: View {
                             Image(.claimBtnNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:72)
-                        }.offset(y: NGDeviceManager.shared.deviceType == .pad ? 70:35)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:72)
+                        }.offset(y: NEGDeviceManager.shared.deviceType == .pad ? 70:35)
                     }
                     
                 }
-                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 400:270)
+                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 400:270)
                 Spacer()
             }
             .padding()
             
         }.background(
             ZStack {
-                Image(.appBgNEG)
-                    .resizable()
-                    .scaledToFill()
+                if let bgItem = shopVM.currentBgItem {
+                    Image(bgItem.image)
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .scaledToFill()
+                }
                 Color.black.opacity(0.6)
             }.edgesIgnoringSafeArea(.all)
             

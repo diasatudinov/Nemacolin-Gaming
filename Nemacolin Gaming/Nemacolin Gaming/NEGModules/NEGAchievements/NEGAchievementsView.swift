@@ -7,10 +7,11 @@
 import SwiftUI
 
 struct NEGAchievementsView: View {
-    @StateObject var user = NGUser.shared
+    @StateObject var user = NEGUser.shared
     @Environment(\.presentationMode) var presentationMode
-    
-    @StateObject var viewModel = NGAchievementsViewModel()
+    @StateObject var shopVM = NEGShopViewModel()
+
+    @StateObject var viewModel = NEGAchievementsViewModel()
     @State private var index = 0
     var body: some View {
         ZStack {
@@ -25,18 +26,18 @@ struct NEGAchievementsView: View {
                             Image(.backIconNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 100:60)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 100:60)
                         }
                         
                         Spacer()
-                        NGCoinBg()
+                        NEGCoinBg()
                     }
                     
                     HStack {
                         Image(.achievetsTextNEG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 150:80)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 150:80)
                     }
                 }.padding([.top])
                 
@@ -49,23 +50,25 @@ struct NEGAchievementsView: View {
                         .onTapGesture {
                             viewModel.achieveToggle(viewModel.achievements[index])
                         }
-                }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 400:240)
+                }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 400:240)
                 Spacer()
                 
             }
         }.background(
             ZStack {
-                Image(.appBgNEG)
-                    .resizable()
-                    .edgesIgnoringSafeArea(.all)
-                    .scaledToFill()
+                if let bgItem = shopVM.currentBgItem {
+                    Image(bgItem.image)
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .scaledToFill()
+                }
                 Color.black.opacity(0.6)
                     .edgesIgnoringSafeArea(.all)
             }
         )
     }
     
-    @ViewBuilder func achievementItem(item: MGAchievement) -> some View {
+    @ViewBuilder func achievementItem(item: NEGAchievement) -> some View {
         
         ZStack {
             HStack {
@@ -77,7 +80,7 @@ struct NEGAchievementsView: View {
                     Image(.rightBtnNEG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:70)
+                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:70)
                         .scaleEffect(x: -1)
                 }
                 .opacity(index == 0 ? 0:1)
@@ -87,26 +90,26 @@ struct NEGAchievementsView: View {
                 VStack(spacing: 16) {
                     
                     Text(item.title)
-                        .font(.custom(Fonts.regular.rawValue, size: NGDeviceManager.shared.deviceType == .pad ? 50:35))
+                        .font(.custom(Fonts.regular.rawValue, size: NEGDeviceManager.shared.deviceType == .pad ? 50:35))
                         .foregroundStyle(.yellow)
                     
                     HStack {
                         Image(item.image)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 180:90)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 180:90)
                         
                         VStack(alignment: .leading) {
                             Text(item.subtitle)
-                                .font(.custom(Fonts.regular.rawValue, size: NGDeviceManager.shared.deviceType == .pad ? 30:20))
+                                .font(.custom(Fonts.regular.rawValue, size: NEGDeviceManager.shared.deviceType == .pad ? 30:20))
                                 .foregroundStyle(.yellow)
                                 .multilineTextAlignment(.leading)
-                                .frame(width: NGDeviceManager.shared.deviceType == .pad ? 700:400)
+                                .frame(width: NEGDeviceManager.shared.deviceType == .pad ? 700:400)
                             
                             Image(.rewardImageNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 50:30)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 50:30)
                         }
                     }
                     
@@ -120,7 +123,7 @@ struct NEGAchievementsView: View {
                     Image(.rightBtnNEG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:70)
+                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:70)
                 }.opacity(index == viewModel.achievements.count - 1 ? 0:1)
             }
             VStack(spacing: 0) {
@@ -130,9 +133,9 @@ struct NEGAchievementsView: View {
                 Image(.claimBtnNEG)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:73)
+                    .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:73)
                     .opacity(item.isAchieved ? 0:1)
-                    .offset(y:NGDeviceManager.shared.deviceType == .pad ? 70: 35)
+                    .offset(y:NEGDeviceManager.shared.deviceType == .pad ? 70: 35)
                 
             }
         }

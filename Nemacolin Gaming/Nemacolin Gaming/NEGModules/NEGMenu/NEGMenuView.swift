@@ -15,9 +15,9 @@ struct NEGMenuView: View {
     @State private var showCalendar = false
     @State private var showDailyTask = false
     
-//    @StateObject var achievementVM = NGAchievementsViewModel()
-//    @StateObject var settingsVM = NGSettingsViewModel()
-//    @StateObject var shopVM = NGShopViewModel()
+    @StateObject var achievementVM = NEGAchievementsViewModel()
+    @StateObject var settingsVM = NGSettingsViewModel()
+    @StateObject var shopVM = NEGShopViewModel()
     
     var body: some View {
         
@@ -28,7 +28,7 @@ struct NEGMenuView: View {
                     
                     Spacer()
                     
-                    NGCoinBg()
+                    NEGCoinBg()
                     
                     Button {
                         showSettings = true
@@ -36,7 +36,7 @@ struct NEGMenuView: View {
                         Image(.settingsIconNEG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 100:50)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 100:50)
                     }
                     
                 }.padding(15)
@@ -58,10 +58,10 @@ struct NEGMenuView: View {
                             Image(.dailyTasksIconNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 120:66)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 120:66)
                         }.offset(y: -5)
                         
-                    }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 160:88)
+                    }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 160:88)
                     
                     Button {
                         showShop = true
@@ -69,7 +69,7 @@ struct NEGMenuView: View {
                         Image(.shopIconNEG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 160:88)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 160:88)
                     }.offset(x: 20)
                     
                     Button {
@@ -78,7 +78,7 @@ struct NEGMenuView: View {
                         Image(.achievementsIconNEG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 160:88)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 160:88)
                     }.offset(x: -30)
                 }
                 Spacer()
@@ -93,19 +93,19 @@ struct NEGMenuView: View {
             }
         )
         .fullScreenCover(isPresented: $showGame) {
-//            NGRoundSelectionView()
+            NGRoundSelectionView()
         }
         .fullScreenCover(isPresented: $showAchievement) {
-//            NGAchievementsView(viewModel: achievementVM)
+            NEGAchievementsView(viewModel: achievementVM)
         }
         .fullScreenCover(isPresented: $showShop) {
-//            NGShopView(viewModel: shopVM)
+            NEGShopView(viewModel: shopVM)
         }
         .fullScreenCover(isPresented: $showSettings) {
-//            NGSettingsView(settingsVM: settingsVM)
+            NEGSettingsView(settingsVM: settingsVM)
         }
         .fullScreenCover(isPresented: $showDailyTask) {
-//            NGDailyTasksView()
+            DailyRewardsView()
         }
     }
     

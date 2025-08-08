@@ -2,14 +2,13 @@
 //  NGShopViewModel.swift
 //  Nemacolin Gaming
 //
-//  Created by Dias Atudinov on 06.08.2025.
 //
 
 
 import SwiftUI
 
 
-final class NGShopViewModel: ObservableObject {
+final class NEGShopViewModel: ObservableObject {
     // MARK: – Shop catalogues
     @Published var shopBgItems: [NGItem] = [
         NGItem(name: "bg1", image: "bgImage1NEG", icon: "gameBgIcon1NEG", price: 100),
@@ -134,7 +133,7 @@ final class NGShopViewModel: ObservableObject {
         }
     }
 
-    func selectOrBuy(_ item: NGItem, user: NGUser, category: NGItemCategory) {
+    func selectOrBuy(_ item: NGItem, user: NEGUser, category: NGItemCategory) {
         
         switch category {
         case .background:
@@ -160,7 +159,7 @@ final class NGShopViewModel: ObservableObject {
         }
     }
     
-    func isMoneyEnough(item: NGItem, user: NGUser, category: NGItemCategory) -> Bool {
+    func isMoneyEnough(item: NGItem, user: NEGUser, category: NGItemCategory) -> Bool {
         user.money >= item.price
     }
     

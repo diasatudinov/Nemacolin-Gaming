@@ -9,6 +9,10 @@ import Combine
 import SpriteKit
 
 class GameScene: SKScene {
+    var shopVM = NEGShopViewModel()
+    var victoryHandler: (() -> Void)?
+    var zombieSpawnHandler: ((CGFloat, Int) -> Void)?
+    
     // Tower
         private let tower = SKSpriteNode(texture: SKTexture(imageNamed: "tower"), size: CGSize(width: 90, height: 90))
         private var towerHealth = 100
@@ -29,9 +33,9 @@ class GameScene: SKScene {
 
         // Combat stats
         private let guardAttackDamage = 10
-        private let zombieAttackDamage = 15
-        private let attackInterval: TimeInterval = 1.0
-        private let minCombatDistance: CGFloat = 50 // half-width + half-width
+        private let zombieAttackDamage = 5
+        private let attackInterval: TimeInterval = 0.5
+        private let minCombatDistance: CGFloat = 50
 
         // Health values
         private let zombieMaxHealth = 100
@@ -47,6 +51,7 @@ class GameScene: SKScene {
         }
 
         override func update(_ currentTime: TimeInterval) {
+            handleZombieSpawns(currentTime)
             handleSpawns(currentTime)
             updateTowerHealthBar()
 
@@ -148,7 +153,19 @@ class GameScene: SKScene {
             zoneNode.fillColor = SKColor.black.withAlphaComponent(0.1)
             addChild(zoneNode)
         }
-
+    
+    private func handleZombieSpawns(_ currentTime: TimeInterval) {
+        let elapsed = currentTime - lastZombieSpawnTime
+        let ratio = min(1, max(0, CGFloat(elapsed / zombieSpawnInterval)))
+        zombieSpawnHandler?(ratio, zombieSpawnCount) // Update SwiftUI
+        if elapsed >= zombieSpawnInterval {
+            zombieSpawnCount = min(zombieMaxSpawnCount, zombieSpawnCount + 1)
+            lastZombieSpawnTime = currentTime
+            zombieSpawnHandler?(0, zombieSpawnCount) // Reset bar
+        }
+    }
+    
+    
         // MARK: - Spawning
         private func handleSpawns(_ currentTime: TimeInterval) {
             if currentTime - lastZombieSpawnTime >= zombieSpawnInterval {
@@ -161,8 +178,9 @@ class GameScene: SKScene {
             }
         }
 
-        private func spawnZombie(at position: CGPoint) {
-            let node = SKSpriteNode(texture: SKTexture(imageNamed: "zombie"), size: CGSize(width: 50, height: 50))
+    private func spawnZombie(at position: CGPoint) {
+        guard let skin = shopVM.currentSkinItem else { return }
+        let node = SKSpriteNode(texture: SKTexture(imageNamed: "\(skin.image)"), size: CGSize(width: 50, height: 50))
             node.name = "zombie"
             node.position = position
             node.userData = ["health": zombieMaxHealth, "nextAttack": 0.0]
@@ -187,15 +205,19 @@ class GameScene: SKScene {
         }
 
         // MARK: - Movement
-        private func move(_ sprite: SKSpriteNode, to target: CGPoint) {
-            let dx = target.x - sprite.position.x
-            let dy = target.y - sprite.position.y
-            let angle = atan2(dy, dx)
-            let speed: CGFloat = 80
-            let delta = CGFloat(1.0/60.0)
-            sprite.position.x += cos(angle) * speed * delta
-            sprite.position.y += sin(angle) * speed * delta
-        }
+    private func move(_ sprite: SKSpriteNode, to target: CGPoint) {
+        // 1) Вычисляем вектор направления
+        let dx = target.x - sprite.position.x
+        let dy = target.y - sprite.position.y
+        let angle = atan2(dy, dx)
+        // 2) Поворачиваем спрайт в сторону движения
+        sprite.zRotation = angle + .pi/2
+        // 3) Перемещаем спрайт вперёд
+        let speed: CGFloat = 80
+        let delta = CGFloat(1.0/60.0)
+        sprite.position.x += cos(angle) * speed * delta
+        sprite.position.y += sin(angle) * speed * delta
+    }
 
         // MARK: - Health Bars
         private func addHealthBar(to node: SKSpriteNode) {
@@ -229,11 +251,10 @@ class GameScene: SKScene {
         }
 
         private func gameOver() {
+            victoryHandler?()
+            NEGUser.shared.updateUserMoney(for: 200)
+            isPaused = true
             isUserInteractionEnabled = false
-            let label = SKLabelNode(text: "Zombies Win!")
-            label.fontSize = 36; label.fontColor = .red
-            label.position = CGPoint(x: size.width/2, y: size.height/2)
-            addChild(label)
         }
     }
 

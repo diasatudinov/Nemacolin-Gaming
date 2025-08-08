@@ -1,5 +1,5 @@
 //
-//  NGCoinBg.swift
+//  NEGCoinBg.swift
 //  Nemacolin Gaming
 //
 //
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct NGCoinBg: View {
-    @StateObject var user = NGUser.shared
-    var height: CGFloat = NGDeviceManager.shared.deviceType == .pad ? 100:50
+struct NEGCoinBg: View {
+    @StateObject var user = NEGUser.shared
+    var height: CGFloat = NEGDeviceManager.shared.deviceType == .pad ? 100:50
     var body: some View {
         ZStack {
             Image(.coinsBgNEG)
@@ -17,7 +17,7 @@ struct NGCoinBg: View {
                 .scaledToFit()
             
             Text("\(user.money)")
-                .font(.system(size: NGDeviceManager.shared.deviceType == .pad ? 30:15, weight: .black))
+                .font(.system(size: NEGDeviceManager.shared.deviceType == .pad ? 30:15, weight: .black))
                 .foregroundStyle(.yellow)
                 .textCase(.uppercase)
                 .offset(x: -15)
@@ -30,5 +30,5 @@ struct NGCoinBg: View {
 }
 
 #Preview {
-    NGCoinBg()
+    NEGCoinBg()
 }

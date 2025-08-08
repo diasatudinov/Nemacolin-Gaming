@@ -1,5 +1,5 @@
 //
-//  NGUser.swift
+//  NEGUser.swift
 //  Nemacolin Gaming
 //
 //
@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-class NGUser: ObservableObject {
+class NEGUser: ObservableObject {
     
-    static let shared = NGUser()
+    static let shared = NEGUser()
     
     @AppStorage("achievement") var achievementNum: Int = 0
     @AppStorage("money") var storedMoney: Int = 100

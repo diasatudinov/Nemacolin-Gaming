@@ -8,8 +8,8 @@ import SwiftUI
 
 struct NEGShopView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var user = NGUser.shared
-    @ObservedObject var viewModel: NGShopViewModel
+    @StateObject var user = NEGUser.shared
+    @ObservedObject var viewModel: NEGShopViewModel
     @State var category: NGItemCategory?
     var categoryArray: [NGItemCategory] = [.skin, .background]
     @State var bgIndex = 0
@@ -25,7 +25,7 @@ struct NEGShopView: View {
                     Image(.shopTextNEG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 180:90)
+                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 180:90)
                     
                     HStack(alignment: .center) {
                         Button {
@@ -38,11 +38,11 @@ struct NEGShopView: View {
                             Image(.backIconNEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 100:50)
                         }
                         Spacer()
                         
-                        NGCoinBg()
+                        NEGCoinBg()
                     }.padding([.horizontal, .top])
                 }
                 Spacer()
@@ -64,7 +64,7 @@ struct NEGShopView: View {
                                     Image(.rightBtnNEG)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:70)
+                                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:70)
                                         .scaleEffect(x: -1)
                                 }
                                 .opacity(skinIndex == 0 ? 0:1)
@@ -79,7 +79,7 @@ struct NEGShopView: View {
                                     Image(.rightBtnNEG)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:70)
+                                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:70)
                                 }.opacity(skinIndex == viewModel.shopSkinItems.count - 1 ? 0:1)
                                 
                             }
@@ -93,7 +93,7 @@ struct NEGShopView: View {
                                     Image(.rightBtnNEG)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:70)
+                                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:70)
                                         .scaleEffect(x: -1)
                                 }
                                 .opacity(bgIndex == 0 ? 0:1)
@@ -108,7 +108,7 @@ struct NEGShopView: View {
                                     Image(.rightBtnNEG)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: NGDeviceManager.shared.deviceType == .pad ? 140:70)
+                                        .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 140:70)
                                 }.opacity(bgIndex == viewModel.shopBgItems.count - 1 ? 0:1)
                                 
                             }
@@ -121,7 +121,7 @@ struct NEGShopView: View {
                             Image(.bgBtnBEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 130:70)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 130:70)
                                 .onTapGesture {
                                     withAnimation {
                                         self.category = .background
@@ -131,7 +131,7 @@ struct NEGShopView: View {
                             Image(.skinBtnBEG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: NGDeviceManager.shared.deviceType == .pad ? 130:70)
+                                .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 130:70)
                                 .onTapGesture {
                                     withAnimation {
                                         self.category = .skin
@@ -139,35 +139,18 @@ struct NEGShopView: View {
                                 }
                         }
                     }
-                    
-                    //                    VStack {
-                    //                        Spacer()
-                    //
-                    //                        HStack {
-                    //                            ForEach(categoryArray, id: \.self) { category in
-                    //                                Image("\(category.rawValue)BtnNG")
-                    //                                    .resizable()
-                    //                                    .scaledToFit()
-                    //                                    .frame(height: NGDeviceManager.shared.deviceType == .pad ? 80:46)
-                    //                                    .offset(y: self.category == category ? -10:0)
-                    //                                    .onTapGesture {
-                    //                                        withAnimation {
-                    //                                            self.category = category
-                    //                                        }
-                    //                                    }
-                    //                            }
-                    //                        }
-                    //                    }
-                }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 500:270)
+                }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 500:270)
                 Spacer()
             }
             
         }.background(
             ZStack {
-                Image(.appBgNEG)
-                    .resizable()
-                    .edgesIgnoringSafeArea(.all)
-                    .scaledToFill()
+                if let bgItem = viewModel.currentBgItem {
+                    Image(bgItem.image)
+                        .resizable()
+                        .edgesIgnoringSafeArea(.all)
+                        .scaledToFill()
+                }
             }
         )
         
@@ -177,19 +160,19 @@ struct NEGShopView: View {
         ZStack {
             VStack {
                 Text("The background is a crowd of\nzombies")
-                    .font(.custom(Fonts.regular.rawValue, size: NGDeviceManager.shared.deviceType == .pad ? 30:20))
+                    .font(.custom(Fonts.regular.rawValue, size: NEGDeviceManager.shared.deviceType == .pad ? 30:20))
                     .foregroundStyle(.yellow)
                     .multilineTextAlignment(.center)
                 
                 Image(.rewardImageNEG)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: NGDeviceManager.shared.deviceType == .pad ? 50:30)
+                    .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 50:30)
                 
                 Image("\(bg.image)")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: NGDeviceManager.shared.deviceType == .pad ? 200:115)
+                    .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 200:115)
                     .cornerRadius(12)
                 
             }.padding(.bottom)
@@ -205,19 +188,19 @@ struct NEGShopView: View {
                                 .resizable()
                                 .scaledToFit()
                             Text(viewModel.isCurrentItem(item: bg, category: .background) ? "selected":"select")
-                                .font(.custom(Fonts.regular.rawValue, size: NGDeviceManager.shared.deviceType == .pad ? 30:20))
+                                .font(.custom(Fonts.regular.rawValue, size: NEGDeviceManager.shared.deviceType == .pad ? 30:20))
                                 .foregroundStyle(.yellow)
-                        }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 120:70)
+                        }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 120:70)
                     } else {
                         Image(.buyBtnNEG)
                             .resizable()
                             .scaledToFit()
                             .opacity(viewModel.isMoneyEnough(item: bg, user: user, category: .background) ? 1:0.6)
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 120:70)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 120:70)
                     }
                 }
                 .offset(y: 20)
-            }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 550:295)
+            }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 550:295)
         }
         
     }
@@ -226,19 +209,19 @@ struct NEGShopView: View {
         ZStack {
             VStack {
                 Text("The background is a crowd of\nzombies")
-                    .font(.custom(Fonts.regular.rawValue, size: NGDeviceManager.shared.deviceType == .pad ? 30:20))
+                    .font(.custom(Fonts.regular.rawValue, size: NEGDeviceManager.shared.deviceType == .pad ? 30:20))
                     .foregroundStyle(.yellow)
                     .multilineTextAlignment(.center)
                 
                 Image(.rewardImageNEG)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: NGDeviceManager.shared.deviceType == .pad ? 50:30)
+                    .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 50:30)
                 
                 Image("\(skin.image)")
                     .resizable()
                     .scaledToFit()
-                    .frame(height: NGDeviceManager.shared.deviceType == .pad ? 200:115)
+                    .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 200:115)
                     .cornerRadius(12)
                 
             }.padding(.bottom)
@@ -254,23 +237,23 @@ struct NEGShopView: View {
                                 .resizable()
                                 .scaledToFit()
                             Text(viewModel.isCurrentItem(item: skin, category: .skin) ? "selected":"select")
-                                .font(.custom(Fonts.regular.rawValue, size: NGDeviceManager.shared.deviceType == .pad ? 30:20))
+                                .font(.custom(Fonts.regular.rawValue, size: NEGDeviceManager.shared.deviceType == .pad ? 30:20))
                                 .foregroundStyle(.yellow)
-                        }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 120:70)
+                        }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 120:70)
                     } else {
                         Image(.buyBtnNEG)
                             .resizable()
                             .scaledToFit()
                             .opacity(viewModel.isMoneyEnough(item: skin, user: user, category: .skin) ? 1:0.6)
-                            .frame(height: NGDeviceManager.shared.deviceType == .pad ? 120:70)
+                            .frame(height: NEGDeviceManager.shared.deviceType == .pad ? 120:70)
                     }
                 }
                 .offset(y: 20)
-            }.frame(height: NGDeviceManager.shared.deviceType == .pad ? 550:295)
+            }.frame(height: NEGDeviceManager.shared.deviceType == .pad ? 550:295)
         }
     }
 }
 
 #Preview {
-    NEGShopView(viewModel: NGShopViewModel())
+    NEGShopView(viewModel: NEGShopViewModel())
 }
